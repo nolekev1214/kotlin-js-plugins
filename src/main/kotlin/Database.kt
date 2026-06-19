@@ -13,9 +13,13 @@ class Database : PluginDataSource {
     fun insertGlobal(value: Any) {
         val key = value.javaClass.name
         globals[key] = value
+        val trigger = DatabaseTriggerEvent(
+            databaseGroup = "globals",
+            type = key
+        )
 
         plugins.forEach {
-            if(it.shouldTrigger("onUpdate", "globals", key)) {
+            if(it.shouldTrigger(trigger)) {
                 it.populateInputs(this)
                 it.attemptExecute()
             }

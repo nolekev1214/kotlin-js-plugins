@@ -11,9 +11,14 @@ class PluginEngineV1(val context: Context) : PluginEngine {
     val pluginInfo: Value = context
         .getBindings("js")
         .getMember("pluginInfo")
+    val trigger: TriggerEvent
 
     init {
         println("Plugin Loaded using Engine v1: ${pluginInfo.getMember("description").asString()}")
+        trigger = DatabaseTriggerEvent(
+            databaseGroup = pluginInfo.getMember("trigger").getMember("databaseGroup").asString(),
+            type = pluginInfo.getMember("trigger").getMember("type").asString()
+        )
     }
 
     override fun attemptExecute() {
@@ -23,14 +28,9 @@ class PluginEngineV1(val context: Context) : PluginEngine {
     }
 
     override fun shouldTrigger(
-        triggerType: String,
-        databaseGroup: String,
-        type: String
+        trigger: TriggerEvent
     ): Boolean {
-        val trigger = pluginInfo.getMember("trigger")
-        return trigger.getMember("triggerType").asString() == triggerType
-            && trigger.getMember("databaseGroup").asString() == databaseGroup
-            && trigger.getMember("type").asString() == type
+        return trigger == this.trigger
     }
 
     override fun populateInputs(database: PluginDataSource) {
