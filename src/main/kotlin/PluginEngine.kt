@@ -1,8 +1,59 @@
 package org.example
 
-sealed interface PluginEngine {
-    fun attemptExecute()
-    fun shouldTrigger(trigger: TriggerEvent): Boolean
-    fun populateInputs(database: PluginDataSource)
-    fun collectOutputs(): List<Any>
+import org.graalvm.polyglot.Context
+import org.graalvm.polyglot.Value
+
+const val PLUGIN_ENGINE_VERSION = 1
+
+class PluginEngine(val context: Context) {
+    var inputsSatisfied = false
+    val main: Value = context
+        .getBindings("js")
+        .getMember("main")
+    val pluginInfo: Value = context
+        .getBindings("js")
+        .getMember("pluginInfo")
+    val trigger: TriggerEvent
+
+    init {
+        println("Plugin Loaded: ${pluginInfo.getMember("description").asString()}")
+        trigger = DatabaseTriggerEvent(
+            databaseGroup = pluginInfo.getMember("trigger").getMember("databaseGroup").asString(),
+            type = pluginInfo.getMember("trigger").getMember("type").asString()
+        )
+    }
+
+    fun attemptExecute() {
+        if (inputsSatisfied) {
+            main.execute()
+        }
+    }
+
+    fun shouldTrigger(
+        trigger: TriggerEvent
+    ): Boolean {
+        return trigger == this.trigger
+    }
+
+    fun populateInputs(database: PluginDataSource) {
+        val inputs = pluginInfo.getMember("inputs")
+        for(i in 0..<inputs.arraySize){
+            val input = inputs.getArrayElement(i)
+            val type = input.getMember("type").asString()
+            val databaseGroup = input.getMember("databaseGroup").asString()
+            val name = input.getMember("name").asString()
+
+            val value = database.get(databaseGroup, type)
+            if (value == null) {
+                inputsSatisfied = false
+                return
+            }
+            context.getBindings("js").putMember(name, value)
+        }
+        inputsSatisfied = true
+    }
+
+    fun collectOutputs(): List<Any> {
+        TODO("Not yet implemented")
+    }
 }

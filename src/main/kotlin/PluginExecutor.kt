@@ -49,10 +49,11 @@ fun loadPlugins() : List<PluginEngine> {
             val context = builder.build()
             context.eval(source)
 
-            when (pluginInfo.getMember("pluginEngine").asInt()) {
-                1 -> PluginEngineV1(context)
-                else -> null
+            if (pluginInfo.getMember("pluginEngine").asInt() != PLUGIN_ENGINE_VERSION){
+                throw IllegalArgumentException("Plugin engine version mismatch")
             }
+
+            PluginEngine(context)
         }
         ?: emptyList()
 }
