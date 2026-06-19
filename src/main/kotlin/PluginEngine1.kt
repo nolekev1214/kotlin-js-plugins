@@ -13,7 +13,7 @@ class PluginEngine1(val context: Context) : PluginEngineInterface {
         .getMember("pluginInfo")
 
     init {
-        println("Plugin Created With Engine v1 with Description: ${pluginInfo.getMember("description").asString()}")
+        println("Plugin Loaded using Engine v1: ${pluginInfo.getMember("description").asString()}")
     }
 
     override fun attemptExecute() {

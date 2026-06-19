@@ -1,5 +1,5 @@
 globalThis.pluginInfo = {
-    description: "Test Plugin",
+    description: "Greeter Plugin",
     pluginEngine: 1,
     debugger: false,
     trigger: {
@@ -10,7 +10,7 @@ globalThis.pluginInfo = {
     inputs: [
         {
             databaseGroup: "globals",
-            name: "param",
+            name: "name",
             type: "java.lang.String"
         },
     ],
@@ -18,5 +18,5 @@ globalThis.pluginInfo = {
 }
 
 globalThis.main = function() {
-    console.log('Hello ' + globalThis.param + ' from JS');
+    console.log('Hello ' + globalThis.name + ' from JS');
 }
