@@ -40,7 +40,7 @@ class PluginEngine1(val context: Context) : PluginEngineInterface {
             val value = database.get(databaseGroup, type)
             if (value == null) {
                 inputsSatisfied = false
-                return;
+                return
             }
             context.getBindings("js").putMember(name, value)
         }
