@@ -1,14 +1,12 @@
 package org.example
 
+import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 
-class Database : PluginDataSource {
+class Database(
+    val triggerEvents: ArrayBlockingQueue<TriggerEvent>
+) : PluginDataSource {
     val globals: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
-    var plugins: MutableList<PluginEngine> = mutableListOf()
-
-    fun addPlugin(plugin: PluginEngine) {
-        plugins.add(plugin)
-    }
 
     fun insertGlobal(value: Any) {
         val key = value.javaClass.name
@@ -17,13 +15,7 @@ class Database : PluginDataSource {
             databaseGroup = "globals",
             type = key
         )
-
-        plugins.forEach {
-            if(it.shouldTrigger(trigger)) {
-                it.populateInputs(this)
-                it.attemptExecute()
-            }
-        }
+        triggerEvents.add(trigger)
     }
 
     override fun get(databaseGroup: String, type: String): Any? {

@@ -4,6 +4,28 @@ import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.HostAccess
 import org.graalvm.polyglot.Source
 import java.io.File
+import java.util.concurrent.ArrayBlockingQueue
+import kotlin.concurrent.thread
+
+class PluginExecutor(
+    val database: PluginDataSource,
+    var triggerEventsQueue: ArrayBlockingQueue<TriggerEvent>,
+    var plugins: List<PluginEngine> = loadPlugins(),
+) {
+    fun start(){
+        thread(start = true, isDaemon = true){
+            while(true){
+                val triggerEvent = triggerEventsQueue.take()
+                plugins.forEach {
+                    if(it.shouldTrigger(triggerEvent)) {
+                        it.populateInputs(database)
+                        it.attemptExecute()
+                    }
+                }
+            }
+        }
+    }
+}
 
 fun loadPlugins() : List<PluginEngine> {
     return File("./plugins")
