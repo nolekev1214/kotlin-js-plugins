@@ -12,6 +12,10 @@ class PluginEngine1(val context: Context) : PluginEngineInterface {
         .getBindings("js")
         .getMember("pluginInfo")
 
+    init {
+        println("Plugin Created With Engine v1 with Description: ${pluginInfo.getMember("description").asString()}")
+    }
+
     override fun attemptExecute() {
         if (inputsSatisfied) {
             main.execute()

@@ -10,8 +10,6 @@ fun loadPlugins() : List<PluginEngineInterface> {
         .listFiles()
         ?.filter { it.extension == "js" }
         ?.mapNotNull {
-            println(it.name)
-
             val source = Source.newBuilder("js", it).build()
 
             val basicContext = Context.newBuilder("js").build()
@@ -19,7 +17,6 @@ fun loadPlugins() : List<PluginEngineInterface> {
             val pluginInfo = basicContext
                 .getBindings("js")
                 .getMember("pluginInfo")
-            println(pluginInfo)
 
             val builder = Context.newBuilder("js")
                 .allowHostAccess(HostAccess.ALL)
