@@ -1,6 +1,6 @@
 package org.example
 
-sealed interface PluginEngineInterface {
+sealed interface PluginEngine {
     fun attemptExecute()
     fun shouldTrigger(triggerType: String, databaseGroup: String, type: String): Boolean
     fun populateInputs(database: PluginDataSource)

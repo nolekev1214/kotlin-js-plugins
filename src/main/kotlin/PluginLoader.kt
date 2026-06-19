@@ -5,7 +5,7 @@ import org.graalvm.polyglot.HostAccess
 import org.graalvm.polyglot.Source
 import java.io.File
 
-fun loadPlugins() : List<PluginEngineInterface> {
+fun loadPlugins() : List<PluginEngine> {
     return File("./plugins")
         .listFiles()
         ?.filter { it.extension == "js" }
@@ -28,7 +28,7 @@ fun loadPlugins() : List<PluginEngineInterface> {
             context.eval(source)
 
             when (pluginInfo.getMember("pluginEngine").asInt()) {
-                1 -> PluginEngine1(context)
+                1 -> PluginEngineV1(context)
                 else -> null
             }
         }

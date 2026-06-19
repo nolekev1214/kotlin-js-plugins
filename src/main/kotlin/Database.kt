@@ -4,9 +4,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 class Database : PluginDataSource {
     val globals: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
-    var plugins: MutableList<PluginEngineInterface> = mutableListOf()
+    var plugins: MutableList<PluginEngine> = mutableListOf()
 
-    fun addPlugin(plugin: PluginEngineInterface) {
+    fun addPlugin(plugin: PluginEngine) {
         plugins.add(plugin)
     }
 

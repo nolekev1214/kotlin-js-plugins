@@ -3,7 +3,7 @@ package org.example
 import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.Value
 
-class PluginEngine1(val context: Context) : PluginEngineInterface {
+class PluginEngineV1(val context: Context) : PluginEngine {
     var inputsSatisfied = false
     val main: Value = context
         .getBindings("js")
