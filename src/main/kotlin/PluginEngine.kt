@@ -53,6 +53,7 @@ class PluginEngine(val context: Context) {
         inputsSatisfied = true
     }
 
+    @Suppress("unused")
     fun collectOutputs(): List<Any> {
         TODO("Not yet implemented")
     }
