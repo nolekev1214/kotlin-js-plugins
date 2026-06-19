@@ -3,7 +3,6 @@ globalThis.pluginInfo = {
     pluginEngine: 1,
     debugger: false,
     trigger: {
-        triggerType: "onUpdate",
         databaseGroup: "globals",
         type: "java.lang.String",
     },
