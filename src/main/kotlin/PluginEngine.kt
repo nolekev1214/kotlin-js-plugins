@@ -2,6 +2,7 @@ package org.example
 
 import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.Value
+import kotlin.time.Duration
 
 const val PLUGIN_ENGINE_VERSION = 1
 
@@ -17,10 +18,15 @@ class PluginEngine(val context: Context) {
 
     init {
         println("Plugin Loaded: ${pluginInfo.getMember("description").asString()}")
-        trigger = DatabaseTriggerEvent(
-            databaseGroup = pluginInfo.getMember("trigger").getMember("databaseGroup").asString(),
-            type = pluginInfo.getMember("trigger").getMember("type").asString()
-        )
+        val triggerInfo = pluginInfo.getMember("trigger")
+        trigger = if (triggerInfo.hasMember("periodic")) {
+            DurationTriggerEvent(Duration.parse(triggerInfo.getMember("periodic").asString()))
+        } else {
+            DatabaseTriggerEvent(
+                databaseGroup = triggerInfo.getMember("databaseGroup").asString(),
+                type = triggerInfo.getMember("type").asString()
+            )
+        }
     }
 
     fun attemptExecute() {

@@ -6,8 +6,10 @@ import java.util.concurrent.CountDownLatch
 fun main() {
     val triggerEventsQueue = ArrayBlockingQueue<TriggerEvent>(10)
     val database = Database(triggerEventsQueue)
+    val timer = Timer(triggerEventsQueue)
     val pluginExecutor = PluginExecutor(database, triggerEventsQueue)
     pluginExecutor.start()
+    timer.scheduleFromPlugins(pluginExecutor.plugins)
 
     database.insertGlobal("Bill")
     Thread.sleep(1000) //BUGBUG: if the global channels too fast the plugin executor will miss the event
