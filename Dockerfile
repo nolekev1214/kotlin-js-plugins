@@ -11,5 +11,6 @@ FROM docker.io/library/eclipse-temurin:21-jre AS run
 WORKDIR /app
 
 COPY --from=build /app/target/untitled-1.0-SNAPSHOT.jar app.jar
+COPY plugins ./plugins
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
