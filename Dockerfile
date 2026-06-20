@@ -9,7 +9,7 @@ COPY src ./src
 RUN mvn package -DskipTests --batch-mode
 
 # Setup GraalVM Dependencies
-FROM ghcr.io/graalvm/graalvm-community:25 AS graal-runtime
+FROM ghcr.io/graalvm/graalvm-community:23 AS graal-runtime
 RUN cp -r $JAVA_HOME /graalvm_home
 
 # Setup Distroless Runtime
