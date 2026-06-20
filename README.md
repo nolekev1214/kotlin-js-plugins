@@ -27,8 +27,8 @@ mvn test
 
 The included `Dockerfile` builds a minimal image using a three-stage build:
 
-1. **Build** — compiles and packages a shaded fat JAR with Maven on `eclipse-temurin:21`.
-2. **GraalVM runtime** — pulls `ghcr.io/graalvm/graalvm-community:25` and copies its JDK to a fixed path so the final stage doesn't need to know the version-specific `JAVA_HOME`.
+1. **Build** — compiles and packages a shaded fat JAR with Maven on `maven:3-eclipse-temurin-21`.
+2. **GraalVM runtime** — pulls `ghcr.io/graalvm/jdk-community:21` and copies its JDK to a fixed path so the final stage doesn't need to know the version-specific `JAVA_HOME`.
 3. **Runtime** — copies only the GraalVM JDK and the fat JAR into a `distroless/base` image, keeping the final image minimal.
 
 Plugins are served from `./plugins/` inside the container (copied at build time).
@@ -47,11 +47,9 @@ To use a custom plugins directory, mount it over the default one:
 docker run -v /path/to/your/plugins:/app/plugins kotlin-js-plugins
 ```
 
-> **Note:** A `sun.misc.Unsafe::objectFieldOffset` warning from `HotSpotTruffleRuntime` is printed at startup. This is a known limitation of running Truffle as a fat JAR on JDK 25 and requires a fix in GraalVM itself.
-
 ## How it works
 
-1. **`Database`** stores typed values in a `ConcurrentHashMap` keyed by Java class name. On each insert it enqueues a `DatabaseTriggerEvent` onto a shared `ArrayBlockingQueue<TriggerEvent>`.
+1. **`Database`** stores typed values in a `ConcurrentHashMap` keyed by Java class name. On each insert it enqueues a `DatabaseTriggerEvent` onto a shared `LinkedBlockingQueue<TriggerEvent>`.
 2. **`PluginExecutor`** runs a daemon thread that blocks on the queue. For each event, it checks every loaded `PluginEngine` — if the plugin's declared trigger matches, it calls `populateInputs` then `attemptExecute`.
 3. **`PluginEngine`** wraps a single GraalVM `Context`. It reads `pluginInfo` and `main` from the JS global scope at load time. `populateInputs` fetches each declared input from `Database` and injects it as a GraalVM binding; if any input is missing the plugin does not execute.
 
