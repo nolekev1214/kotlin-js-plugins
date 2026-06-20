@@ -4,7 +4,7 @@ A Kotlin/JVM plugin engine that loads and executes JavaScript plugins via **Graa
 
 ## Requirements
 
-- JDK 17+ (GraalVM recommended for best performance)
+- JDK 21+ (GraalVM recommended for best performance)
 - Maven 3.x
 
 ## Commands
