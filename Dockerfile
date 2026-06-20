@@ -25,4 +25,4 @@ COPY --from=build /app/target/*.jar app.jar
 COPY plugins ./plugins
 
 ENTRYPOINT ["java"]
-CMD ["-jar", "app.jar"]
+CMD ["--enable-native-access=ALL-UNNAMED", "-jar", "app.jar"]
