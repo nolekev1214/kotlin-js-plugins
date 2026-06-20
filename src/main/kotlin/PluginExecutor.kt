@@ -4,12 +4,12 @@ import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.HostAccess
 import org.graalvm.polyglot.Source
 import java.io.File
-import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.BlockingQueue
 import kotlin.concurrent.thread
 
 class PluginExecutor(
     val database: PluginDataSource,
-    var triggerEventsQueue: ArrayBlockingQueue<TriggerEvent>,
+    var triggerEventsQueue: BlockingQueue<TriggerEvent>,
     var plugins: List<PluginEngine> = loadPlugins(),
 ) {
     fun start(){

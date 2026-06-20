@@ -1,10 +1,10 @@
 package org.example
 
-import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.LinkedBlockingQueue
 
 fun main() {
-    val triggerEventsQueue = ArrayBlockingQueue<TriggerEvent>(10)
+    val triggerEventsQueue = LinkedBlockingQueue<TriggerEvent>()
     val database = Database(triggerEventsQueue)
     val pluginExecutor = PluginExecutor(database, triggerEventsQueue)
     pluginExecutor.start()

@@ -117,6 +117,5 @@ globalThis.main = function() {
 
 ## Known limitations
 
-- The trigger queue has a fixed capacity of 10. If database inserts happen faster than the executor drains the queue, events will be dropped. The `Thread.sleep` calls in `Main.kt` are a workaround for this.
 - `collectOutputs()` in `PluginEngine` is not yet implemented.
 - Only one value per type per database group is stored; inserting a second `String` into `globals` overwrites the first.

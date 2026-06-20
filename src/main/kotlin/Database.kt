@@ -1,10 +1,10 @@
 package org.example
 
-import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.BlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 
 class Database(
-    val triggerEvents: ArrayBlockingQueue<TriggerEvent>
+    val triggerEvents: BlockingQueue<TriggerEvent>
 ) : PluginDataSource {
     val globals: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
 
