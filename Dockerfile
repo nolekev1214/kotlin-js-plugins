@@ -1,4 +1,4 @@
-FROM docker.io/library/eclipse-temurin:21-jdk AS build
+FROM docker.io/library/maven:3-eclipse-temurin-21 AS build
 WORKDIR /app
 
 COPY pom.xml .
